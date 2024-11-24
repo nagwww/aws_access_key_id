@@ -28,7 +28,7 @@ This table lists various prefixes and their associated AWS resource types. For m
 ## Installation
 Install the package via pip:
 
-``` pip install aws-access-key-id ```
+``` pip install aws_access_key_id ```
 
 ## Usage
 Here’s an example of how to use the module in your Python code:

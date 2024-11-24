@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="aws-access-key-id",  # Name of your package on PyPI
+    name="aws_access_key_id",  # Name of your package on PyPI
     version="1.0.0",           # Initial version
     author="Nag Medida",
     author_email="nagwww@gmail.com",

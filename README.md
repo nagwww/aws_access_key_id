@@ -101,6 +101,39 @@ git push origin feature-name
 * **Testing:** Add test cases for new features in the tests/ directory.
 * **Documentation:** Update the README.md file for any major changes.
 
+### Project Structure
+The repository is organized as follows:
+
+```
+aws_access_key_id/
+│
+├── aws_access_key_id/        # Module folder
+│   ├── __init__.py           # Contains your module code
+│
+├── tests/                    # Test cases folder
+│   ├── test_aws_access_key_id.py  # Unit tests for the module
+│
+├── LICENSE                   # Project license file (e.g., MIT License)
+├── README.md                 # Detailed description and usage documentation
+├── setup.py                  # Configuration for building and packaging
+├── pyproject.toml            # Build system configuration (PEP 517/518)
+├── setup.cfg                 # Optional: Additional build configurations
+```
+### Explanation
+```aws_access_key_id/:``` The core module containing all the functionality.
+
+```tests/:``` Contains test cases to ensure the module works as expected.
+
+```LICENSE:``` The license file for the project (e.g., MIT License).
+
+```README.md:``` Documentation about the project, including installation and usage.
+
+```setup.py:``` Configures the module for distribution and packaging.
+
+```pyproject.toml:``` Specifies the build system and dependencies.
+
+```setup.cfg:``` Optional configurations for packaging tools.
+
 ## License
 This project is licensed under the MIT License.
 

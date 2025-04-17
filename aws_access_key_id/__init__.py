@@ -1,6 +1,7 @@
 import json
 import base64
 
+__version__ = "1.1"
 
 def get_resource_type(prefix):
     """Return the resource type based on the prefix."""

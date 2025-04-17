@@ -1,4 +1,5 @@
 import json
+import base64
 
 
 def get_resource_type(prefix):
@@ -25,47 +26,30 @@ def aws_account_from_aws_key_id(aws_key_id):
     if len(aws_key_id) <= 4:
         return "Invalid Key ID"
     trimmed_key_id = aws_key_id[4:]  # Remove the first 4 characters
-    decoded = base32_decode(trimmed_key_id)
-    y = decoded[:6]
-    z = int.from_bytes(y, byteorder="big")
-    mask = 0x7FFFFFFFFF80
-    e = (z & mask) >> 7
-    return str(e).zfill(12)  # Return 12-digit account ID
 
+    # Pad base32 string to multiple of 8
+    padding = "=" * ((8 - len(trimmed_key_id) % 8) % 8)
+    padded_key = trimmed_key_id + padding
 
-def base32_decode(input_str):
-    """Decode a base32-encoded string."""
-    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
-    buffer = 0
-    bits_left = 0
-    output = bytearray()
-    for char in input_str:
-        val = alphabet.find(char.upper())
-        if val == -1:
-            continue  # Skip invalid characters
-        buffer = (buffer << 5) | val
-        bits_left += 5
-
-        if bits_left >= 8:
-            bits_left -= 8
-            output.append(buffer >> bits_left)
-            buffer &= (1 << bits_left) - 1
-
-    return bytes(output)
+    try:
+        decoded = base64.b32decode(padded_key, casefold=True)
+        y = decoded[:6]
+        z = int.from_bytes(y, byteorder="big")
+        mask = 0x7FFFFFFFFF80
+        e = (z & mask) >> 7
+        return str(e).zfill(12)  # Return 12-digit account ID
+    except Exception:
+        return "Failed to decode"
 
 
 def aws_access_key_id(aws_access_key_id):
     """Extract AWS account ID and resource type from an AWS access key ID."""
     try:
-        # Validate input
         if not aws_access_key_id or len(aws_access_key_id) < 4:
             raise ValueError("Invalid AWS Access Key ID provided.")
 
-        # Get resource type from prefix
         prefix = aws_access_key_id[:4]
         resource_type = get_resource_type(prefix)
-
-        # Decode AWS account ID
         account_id = aws_account_from_aws_key_id(aws_access_key_id)
 
         return {
@@ -84,7 +68,7 @@ def aws_access_key_id(aws_access_key_id):
             "headers": {"Content-Type": "application/json"},
         }
 
-    except Exception as e:
+    except Exception:
         return {
             "statusCode": 500,
             "body": json.dumps({"error": "An internal error occurred."}),
@@ -100,4 +84,3 @@ def get_aws_account_id(aws_access_key_id):
         return aws_account_from_aws_key_id(aws_access_key_id)
     except Exception as e:
         raise ValueError(f"Error extracting AWS account ID: {str(e)}")
-

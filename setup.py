@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="aws_access_key_id",  # Name of your package on PyPI
-    version="1.1",             # Initial version
+    version="1.2",             # Initial version
     author="Nag Medida",
     author_email="nagwww@gmail.com",
     description="Extract AWS account ID and resource type from an AWS access key ID.",
